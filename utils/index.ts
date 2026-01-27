@@ -1,36 +1,68 @@
-export async function fetchCars() {
-  const headers = {
-    "x-rapidapi-key": "51c39c680bmsh2efd6df21f285c3p18d655jsnb7370bbcc452",
-    "x-rapidapi-host": "cars-by-api-ninjas.p.rapidapi.com",
-  };
+import { CarProps, FilterProps } from "@/types";
 
-  const response = await fetch(
-    "https://cars-by-api-ninjas.p.rapidapi.com/v1/cars?model=corolla",
-    {
-      headers: headers,
-    },
-  );
+export async function fetchCars(filters: FilterProps): Promise<CarProps[]> {
+  const { manufacturer, model, year, fuel, limit } = filters;
 
-  const result = await response.json();
+  const params = new URLSearchParams();
 
-  return result;
+  if (manufacturer) params.append("make", manufacturer);
+  if (model) params.append("model", model);
+  if (year) params.append("year", String(year));
+  if (fuel) params.append("fuel_type", fuel);
+  if (limit) params.append("limit", String(limit));
+
+  try {
+    const response = await fetch(
+      `https://cars-by-api-ninjas.p.rapidapi.com/v1/cars?${params.toString()}`,
+      {
+        headers: {
+          "x-rapidapi-key": process.env.NEXT_PUBLIC_RAPID_API_KEY ?? "",
+          "x-rapidapi-host": "cars-by-api-ninjas.p.rapidapi.com",
+        },
+        cache: "no-store",
+      },
+    );
+
+    if (!response.ok) return [];
+
+    const data = await response.json();
+    return Array.isArray(data) ? data : [];
+  } catch {
+    return [];
+  }
+}
+
+export const generateCarImageUrl = (car: CarProps, angle?: string) => {
+  const url = new URL("https://cdn.imagin.studio/getimage");
+  const { make, model, year } = car;
+
+  url.searchParams.append("customer", "img");
+  url.searchParams.append("make", make);
+  url.searchParams.append("modelFamily", model.split(" ")[0]);
+  url.searchParams.append("zoomType", "fullscreen");
+  url.searchParams.append("modelYear", `${year}`);
+  url.searchParams.append("angle", `${angle}`);
+
+  return `${url}`;
 };
 
-export const calculateCarRent = (year: number) => {
-  const basePricePerDay = 50; // Base rental price per day in dollars
-  const mileageFactor = 0.1; // Additional rate per mile driven
-  const ageFactor = 0.05; // Additional rate per year of vehicle age
+export const calculateCarRent = (year: number, cityMpg: number) => {
+  const basePricePerDay = 50;
+  const mileageFactor = 0.1;
+  const ageFactor = 0.05;
 
-  // Random city MPG between 10 and 40
-  const randomCityMpg = Math.floor(Math.random() * (40 - 10 + 1)) + 10;
+  const mileageRate = cityMpg * mileageFactor;
+  const ageRate = (2024 - year) * ageFactor;
 
-  // Calculate additional rate based on mileage and age
-  const mileageRate = randomCityMpg * mileageFactor;
-  const ageRate = (new Date().getFullYear() - year) * ageFactor;
-
-  // Calculate total rental rate per day
   const rentalRatePerDay = basePricePerDay + mileageRate + ageRate;
 
   return rentalRatePerDay.toFixed(0);
 };
 
+export const mockMpgFromKey = (key: string) => {
+  let hash = 0;
+  for (let i = 0; i < key.length; i++) {
+    hash = key.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  return 10 + (Math.abs(hash) % 31);
+};

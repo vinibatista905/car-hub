@@ -1,20 +1,17 @@
 "use client";
 
 import { CarCardProps } from "@/types";
-import { calculateCarRent } from "@/utils";
+import { calculateCarRent, generateCarImageUrl } from "@/utils";
 import Image from "next/image";
 import { useState } from "react";
 import { CarDetails, CustomButton } from "@/components";
 
 const CarCard = ({ car }: CarCardProps) => {
-  const { city_mpg, year, make, model, transmission, drive } = car;
+  const { mock_city_mpg, year, make, model, transmission, drive } = car;
 
-  const [randomCityMpg] = useState(
-    () => Math.floor(Math.random() * (40 - 10 + 1)) + 10,
-  );
   const [isOpen, setIsOpen] = useState(false);
 
-  const carRent = calculateCarRent(year);
+  const carRent = calculateCarRent(year, mock_city_mpg);
 
   return (
     <div className="car-card group">
@@ -32,7 +29,7 @@ const CarCard = ({ car }: CarCardProps) => {
 
       <div className="relative w-full h-40 my-3 object-contain">
         <Image
-          src="/hero.png"
+          src={generateCarImageUrl(car)}
           alt="car model"
           fill
           priority
@@ -61,7 +58,7 @@ const CarCard = ({ car }: CarCardProps) => {
 
           <div className="flex flex-col justify-center items-center gap-2">
             <Image src="/gas.svg" width={20} height={20} alt="gas" />
-            <p className="text-[14px]">{randomCityMpg} MPG</p>
+            <p className="text-[14px]">{mock_city_mpg ?? "--"} MPG</p>
           </div>
         </div>
 

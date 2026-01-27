@@ -1,9 +1,26 @@
 import { SearchBar, CustomFilter, CarCard } from "@/components";
-import { fetchCars } from "@/utils";
+import { CarProps, FilterProps } from "@/types";
+import { fetchCars, mockMpgFromKey } from "@/utils";
 
-export default async function CarCatalogue() {
-  const allCars = await fetchCars();
+export default async function CarCatalogue({
+  params,
+}: {
+  params: FilterProps;
+}) {
+  const allCars = await fetchCars({
+    manufacturer: params.manufacturer || "",
+    model: params.model || "",
+    limit: params.limit,
+    fuel: params.fuel,
+    year: params.year,
+  });
+  console.log("🚗 carros:", allCars);
+
   const isDataEmpty = !Array.isArray(allCars) || allCars.length < 1 || !allCars;
+  const carsWithMock = allCars?.map((car: CarProps) => ({
+    ...car,
+    mock_city_mpg: mockMpgFromKey(`${car.make}-${car.model}-${car.year}`),
+  }));
 
   return (
     <div className="mt-12 padding-x padding-y max-width" id="discover">
@@ -23,7 +40,7 @@ export default async function CarCatalogue() {
       {!isDataEmpty ? (
         <section>
           <div className="home__cars-wrapper">
-            {allCars?.map((car, index) => (
+            {carsWithMock?.map((car: CarProps, index: number) => (
               <CarCard key={index} car={car} />
             ))}
           </div>
@@ -31,7 +48,7 @@ export default async function CarCatalogue() {
       ) : (
         <div className="home__error-container">
           <h2 className="text-black text-xl font-bold">Oops, no results</h2>
-          <p>{allCars?.message}</p>
+          {/* <p>{allCars?.message}</p> */}
         </div>
       )}
     </div>
