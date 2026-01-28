@@ -10,8 +10,14 @@ export interface CustomButtonProps {
   isDisabled?: boolean;
 }
 
+export interface OptionProps {
+  title: string;
+  value: string;
+}
+
 export interface CustomFilterProps {
   title: string;
+  options: OptionProps[];
 }
 
 export interface SearchManufacturerProps {
@@ -55,4 +61,9 @@ export interface CarDetailsProps {
   isOpen: boolean;
   closeModal: () => void;
   car: CarProps;
+}
+
+export interface ShowMoreProps {
+  pageNumber: number;
+  isNext: boolean;
 }

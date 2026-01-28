@@ -46,6 +46,23 @@ export const generateCarImageUrl = (car: CarProps, angle?: string) => {
   return `${url}`;
 };
 
+export const updateSearchParams = (type: string, value: string) => {
+  const searchParams = new URLSearchParams(window.location.search);
+
+  if (!value) {
+    searchParams.delete(type);
+  } else {
+    searchParams.set(type, value);
+  }
+
+  const queryString = searchParams.toString();
+  const newPathname = queryString
+    ? `${window.location.pathname}?${queryString}`
+    : window.location.pathname;
+
+  return newPathname;
+};
+
 export const calculateCarRent = (year: number, cityMpg: number) => {
   const basePricePerDay = 50;
   const mileageFactor = 0.1;
