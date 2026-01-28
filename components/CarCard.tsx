@@ -8,7 +8,6 @@ import { CarDetails, CustomButton } from "@/components";
 
 const CarCard = ({ car }: CarCardProps) => {
   const { city_mpg, year, make, model, transmission, drive } = car;
-  console.log(car);
 
   const [isOpen, setIsOpen] = useState(false);
 
