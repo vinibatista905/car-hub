@@ -9,6 +9,7 @@ import SearchButton from "./SearchButton";
 import CarCard from "./CarCard";
 import CarDetails from "./CarDetails";
 import ShowMore from "./ShowMore";
+import CarCatalogueSkeleton from "./CarCatalogueSkeleton";
 
 export {
   Navbar,
@@ -22,4 +23,5 @@ export {
   CarCard,
   CarDetails,
   ShowMore,
+  CarCatalogueSkeleton,
 };

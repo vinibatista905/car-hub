@@ -7,11 +7,12 @@ import { useState } from "react";
 import { CarDetails, CustomButton } from "@/components";
 
 const CarCard = ({ car }: CarCardProps) => {
-  const { mock_city_mpg, year, make, model, transmission, drive } = car;
+  const { city_mpg, year, make, model, transmission, drive } = car;
+  console.log(car);
 
   const [isOpen, setIsOpen] = useState(false);
 
-  const carRent = calculateCarRent(year, mock_city_mpg);
+  const carRent = calculateCarRent(year, city_mpg);
 
   return (
     <div className="car-card group">
@@ -53,12 +54,12 @@ const CarCard = ({ car }: CarCardProps) => {
 
           <div className="flex flex-col justify-center items-center gap-2">
             <Image src="/tire.svg" width={20} height={20} alt="tire" />
-            <p className="text-[14px]">{drive.toUpperCase()}</p>
+            <p className="text-[14px]">{drive && drive.toUpperCase()}</p>
           </div>
 
           <div className="flex flex-col justify-center items-center gap-2">
             <Image src="/gas.svg" width={20} height={20} alt="gas" />
-            <p className="text-[14px]">{mock_city_mpg ?? "--"} MPG</p>
+            <p className="text-[14px]">{city_mpg ?? "--"} MPG</p>
           </div>
         </div>
 

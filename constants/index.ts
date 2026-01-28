@@ -34,6 +34,7 @@ export const manufacturers = [
   "Nissan",
   "Porsche",
   "Ram",
+  "Renault",
   "Rolls-Royce",
   "Subaru",
   "Tesla",
@@ -53,6 +54,9 @@ export const yearsOfProduction = [
   { title: "2021", value: "2021" },
   { title: "2022", value: "2022" },
   { title: "2023", value: "2023" },
+  { title: "2024", value: "2024" },
+  { title: "2025", value: "2025" },
+  { title: "2026", value: "2026" },
 ];
 
 export const fuels = [
@@ -77,7 +81,7 @@ export const footerLinks = [
       { title: "How it works", url: "/" },
       { title: "Featured", url: "/" },
       { title: "Partnership", url: "/" },
-      { title: "Bussiness Relation", url: "/" },
+      { title: "Business Relation", url: "/" },
     ],
   },
   {

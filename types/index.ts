@@ -27,6 +27,7 @@ export interface SearchManufacturerProps {
 
 export interface SearchButtonProps {
   otherClasses: string;
+  disabled?: boolean;
 }
 
 export interface FilterProps {

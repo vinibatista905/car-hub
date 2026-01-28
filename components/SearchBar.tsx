@@ -3,24 +3,30 @@
 import { SearchButton, SearchManufacturer } from "@/components";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import React, { useState, useTransition } from "react";
 
 const SearchBar = () => {
   const router = useRouter();
   const [manufacturer, setManufacturer] = useState<string | null>("");
   const [model, setModel] = useState<string>("");
+  const [isPending, startTransition] = useTransition();
 
   const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (manufacturer == "" || model == "") {
+    if (manufacturer == "" && model == "") {
       return alert("Please fill in the search bar");
     }
 
-    updateSearchParams(manufacturer?.toLowerCase(), model.toLowerCase());
+    startTransition(() => {
+      updateSearchParams(manufacturer?.toLowerCase(), model.toLowerCase());
+    });
   };
 
-  const updateSearchParams = (manufacturer: string | null | undefined, model: string) => {
+  const updateSearchParams = (
+    manufacturer: string | null | undefined,
+    model: string,
+  ) => {
     const searchParams = new URLSearchParams(window.location.search);
 
     if (model) {
@@ -38,7 +44,7 @@ const SearchBar = () => {
     const newPathname = `${window.location.pathname}?${searchParams.toString()}`;
 
     router.push(newPathname, { scroll: false });
-  }
+  };
 
   return (
     <form className="searchbar" onSubmit={handleSearch}>
@@ -48,7 +54,7 @@ const SearchBar = () => {
           setManufacturer={setManufacturer}
         />
 
-        <SearchButton otherClasses="sm:hidden" />
+        <SearchButton disabled={isPending} otherClasses="sm:hidden" />
       </div>
 
       <div className="searchbar__item">
@@ -69,9 +75,9 @@ const SearchBar = () => {
           className="searchbar__input"
         />
 
-        <SearchButton otherClasses="sm:hidden" />
+        <SearchButton disabled={isPending} otherClasses="sm:hidden" />
       </div>
-      <SearchButton otherClasses="max-sm:hidden" />
+      <SearchButton disabled={isPending} otherClasses="max-sm:hidden" />
     </form>
   );
 };

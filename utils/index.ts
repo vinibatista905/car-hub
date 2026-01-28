@@ -76,10 +76,15 @@ export const calculateCarRent = (year: number, cityMpg: number) => {
   return rentalRatePerDay.toFixed(0);
 };
 
-export const mockMpgFromKey = (key: string) => {
+export const mockMpgFromKey = (type: string, car: CarProps) => {
+  const key = `${type}-${car.make}-${car.model}-${car.year}`;
+
   let hash = 0;
   for (let i = 0; i < key.length; i++) {
     hash = key.charCodeAt(i) + ((hash << 5) - hash);
   }
+
   return 10 + (Math.abs(hash) % 31);
 };
+
+

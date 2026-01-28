@@ -19,7 +19,9 @@ export default async function CarCatalogue({
   const isDataEmpty = !Array.isArray(allCars) || allCars.length < 1 || !allCars;
   const carsWithMock = allCars?.map((car: CarProps) => ({
     ...car,
-    mock_city_mpg: mockMpgFromKey(`${car.make}-${car.model}-${car.year}`),
+    city_mpg: mockMpgFromKey("city", car),
+    combination_mpg: mockMpgFromKey("combination", car),
+    highway_mpg: mockMpgFromKey("highway", car),
   }));
 
   return (

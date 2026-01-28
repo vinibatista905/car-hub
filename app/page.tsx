@@ -1,6 +1,7 @@
-import { Hero } from "@/components";
+import { CarCatalogueSkeleton, Hero } from "@/components";
 import CarCatalogue from "@/components/CarCatalogue";
 import { FilterProps } from "@/types";
+import { Suspense } from "react";
 
 export default async function Home({
   searchParams,
@@ -12,7 +13,9 @@ export default async function Home({
   return (
     <main className="overflow-hidden">
       <Hero />
-      <CarCatalogue params={params} />
+      <Suspense fallback={<CarCatalogueSkeleton />}>
+        <CarCatalogue params={params} />
+      </Suspense>
     </main>
   );
 }
